@@ -246,8 +246,10 @@ func (conn *Conn) inWorker() {
 				case conn.eavesdropped <- msg:
 				default:
 				}
-				conn.eavesdroppedLck.Unlock()
-				continue
+
+				// reenable this if you want to stop standard forwarding while eavesdropping.
+				// conn.eavesdroppedLck.Unlock()
+				// continue
 			}
 			conn.eavesdroppedLck.Unlock()
 			dest, _ := msg.Headers[FieldDestination].value.(string)
