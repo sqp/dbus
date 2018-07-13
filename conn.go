@@ -219,9 +219,7 @@ func (conn *Conn) Close() error {
 	return conn.transport.Close()
 }
 
-// Eavesdrop causes conn to send all incoming messages to the given channel
-// without further processing. Method replies, errors and signals will not be
-// sent to the appropiate channels and method calls will not be handled. If nil
+// Eavesdrop forwards a copy of incoming messages to the given chan. If nil
 // is passed, the normal behaviour is restored.
 //
 // The caller has to make sure that ch is sufficiently buffered;
@@ -274,8 +272,6 @@ func (conn *Conn) inWorker() {
 			case conn.eavesdropped <- msg:
 			default:
 			}
-			conn.eavesdroppedLck.Unlock()
-			continue
 		}
 		conn.eavesdroppedLck.Unlock()
 		dest, _ := msg.Headers[FieldDestination].value.(string)
